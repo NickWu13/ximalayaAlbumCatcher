@@ -7,6 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 import time
 import re
+import logging
 
 
 class XimalayaSeleniumCrawler:
@@ -31,9 +32,9 @@ class XimalayaSeleniumCrawler:
                 service=Service(ChromeDriverManager().install()),
                 options=chrome_options
             )
-            print("Chrome驱动初始化成功。")
+            logging.info("Chrome驱动初始化成功。")
         except Exception as e:
-            print(f"Chrome驱动初始化失败: {e}")
+            logging.exception(f"Chrome驱动初始化失败: {e}")
             raise
     
     def get_anchor_name(self, anchor_id):
@@ -60,9 +61,10 @@ class XimalayaSeleniumCrawler:
                         break
                 except:
                     continue
+
             return anchor_name
         except Exception as e:
-            print(f"获取主播名称失败: {e}")
+            logging.exception(f"获取主播名称失败: {e}")
             return f"主播_{anchor_id}"
     
     def get_albums_from_album_tab(self, anchor_id):
@@ -145,7 +147,7 @@ class XimalayaSeleniumCrawler:
                 if finished_icon:
                     is_finished = True
             except:
-                pass
+                pass               
             intro_element = container.find_element(By.CSS_SELECTOR, '.anchor-user-album-signature')
             album_intro = intro_element.text.strip()
             total_tracks = 0
